@@ -26,7 +26,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 app.use('/url', urlRoute);
-app.use("/:shortId", async (req, res)=>{
+app.get("/:shortId", async (req, res)=>{
   console.log("**** HELLO ****", req.params);
   const shortId = req.params.shortId;
   const origionalEntry = await URL.findOneAndUpdate(
