@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> <%=title%> </title>
+    <link rel="stylesheet" href="/stylesheets/login.css">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login">
+          <h5 class="login__title">Login</h5>
+          <div class="login__form form">
+            <form action="/user/login" method="POST">
+                <label for="username">Username</label>
+                <input type="text" name="username" class="form__input" />
+                <label for="password">Password</label>
+                <input type="password" name="password" class="form__input" />
+                <input type="checkbox" name="remember-me" class="form__check" />
+                <label for="remember-me">Remember me</label>
+                <div class="form__btn btn btn--red">Login</div>
+                <input type="submit" class="form__btn btn btn--red" value="Login" />
+                <div class="find-password"><a href="#">Lost your password?</a></div>
+                <p class="sign-up">Don't have an account? <a href="#">Sign up</a>.</p>
+            </form>
+          </div>
+        </div>
+      </div>
+</body>
+</html>
