@@ -1,0 +1,96 @@
+/* Footer Starts Here */ 
+
+.footer-section{
+    background-color: var(--light-black);
+}
+
+.footer-div{
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    padding: 0 25px;
+}
+
+.footer-content{
+    margin: auto;
+    padding: 0 25px;
+}
+
+.footer-SayHi{}
+
+.footer-SayHi-img-block{
+    
+}
+
+.footer-SayHi-img-block > img{
+    width: 30vw;
+    height: 30vw;
+    float: right;
+}
+
+.footer-SayHi-form-block{
+    margin: 0 auto;
+}
+.footer-SocialLinks{}
+
+
+.footer-form-div{
+    width: max-content;
+    height: max-content;
+    margin: 1rem 0;
+}
+
+.footer-input-text, .footer-input-email, .footer-input-message{
+    width: 30vw;
+    height: 2vw;
+    border: 1px solid var(--primary-color);
+    color: white;
+    background-color: transparent;
+    font-weight: bold;
+    font-size: small;
+}
+
+.footer-input-submit{
+    width: 4.1vw;
+    height: 2.2vw;
+    border-radius: 00.5rem;
+    border: 1px solid var(--primary-color);
+    color: white;
+    background-color: transparent;  
+    cursor: pointer;  
+}
+.footer-input-submit:hover{
+    background-color: rgb(250, 77, 198);
+}
+
+.footer-label{
+    font-weight: normal;
+    font-size: large;
+}
+
+.social-links{
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+}
+.social-icons{
+    display: flex;
+    flex-direction: row;
+    
+}
+
+.social-icons-list{
+    padding-inline-start: 0;
+}
+
+.social-icon-img-div{
+    display:flex;
+    flex-direction: column;
+    margin: auto;
+}
+.social-img{
+    width: 4vw;
+    height: 4vw;
+}
+
+/* Footer Ends Here */ 

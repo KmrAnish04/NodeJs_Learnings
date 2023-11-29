@@ -1,0 +1,32 @@
+/* Navigation Bar Starts here*/
+.navigation{
+    background-color: black;
+    border-bottom: 1px solid var(--primary-color);
+    border-top: 1px solid var(--primary-color);
+}
+
+.nav-content{
+    margin: auto 20px;
+    display: flex;
+    flex-direction: row;
+}
+
+.nav-brand{
+    flex-basis: 30%;
+    font-size: larger;
+}
+
+.nav-pill-div{
+    padding-inline-start: 0;
+}
+
+.nav-pills{
+    margin: auto 0;
+    flex-basis: 70%;
+}
+
+.nav-pills-list{
+    display: flex;
+    justify-content: flex-end;
+}
+/* Navigation Bar Ends Here */

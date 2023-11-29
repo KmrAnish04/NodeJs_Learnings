@@ -1,19 +1,53 @@
-var Comments = new Schema({
-    title     : String
-  , body      : String
-  , date      : Date
-});
+// models/project.js
 
-var BlogPost = new Schema({
-    author    : ObjectId
-  , title     : String
-  , body      : String
-  , date      : Date
-  , comments  : [Comments]
-  , meta      : {
-        votes : Number
-      , favs  : Number
+const mongoose = require('mongoose');
+
+const projectSchema = new mongoose.Schema({
+  title: {
+    type: String,
+    required: true
+  },
+  description: {
+    type: String,
+    required: true
+  },
+  images: {
+    type: [String], // Array of image URLs
+    default: []
+  },
+  projectLink: {type: String,},
+  githubLink: {type: String,},
+  likes: [
+    {
+      user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User' // Assuming you have a User model
+      },
+      date: {
+        type: Date,
+        default: Date.now
+      }
     }
+  ],
+  comments: [
+    {
+      user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User' // Assuming you have a User model
+      },
+      text: String,
+      date: {
+        type: Date,
+        default: Date.now
+      }
+    }
+  ],
+  dateCreated: {
+    type: Date,
+    default: Date.now
+  }
 });
 
-mongoose.model('BlogPost', BlogPost);
+const Project = mongoose.model('Project', projectSchema);
+
+module.exports = Project;

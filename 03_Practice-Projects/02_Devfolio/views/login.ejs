@@ -7,7 +7,12 @@
     <link rel="stylesheet" href="/stylesheets/login.css">
 </head>
 <body>
-    <div class="login-container">
+  <%- include('./partials/navbar') %>
+
+  <div class="login-container">
+      <% if (message && message.length > 0) { %>
+        <p class="error-message"><%= message %></p>
+      <% } %>
         <div class="login">
           <h5 class="login__title">Login</h5>
           <div class="login__form form">
@@ -21,10 +26,13 @@
                 <div class="form__btn btn btn--red">Login</div>
                 <input type="submit" class="form__btn btn btn--red" value="Login" />
                 <div class="find-password"><a href="#">Lost your password?</a></div>
-                <p class="sign-up">Don't have an account? <a href="#">Sign up</a>.</p>
+                <p class="sign-up">Don't have an account? <a href="/user/register">Sign up</a>.</p>
             </form>
           </div>
         </div>
       </div>
+
+      <%- include('./partials/footer') %>
+
 </body>
 </html>

@@ -6,6 +6,7 @@ var logger = require('morgan');
 const {connectToMongoDB} = require('./database/controllers/connectDB')
 const expressSession = require('express-session')
 const passport = require('passport');
+const flash = require("connect-flash");
 
 
 
@@ -30,6 +31,7 @@ app.use(expressSession({
   saveUninitialized: false,
   secret: "this is devfolio's token!"
 }))
+app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
 
