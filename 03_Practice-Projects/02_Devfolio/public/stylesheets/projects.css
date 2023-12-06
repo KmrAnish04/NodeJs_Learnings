@@ -1,0 +1,35 @@
+button {
+    cursor: pointer;
+    outline: 0;
+    color: #AAA;
+    max-height: 40px;
+    flex: 1; /* Distribute available space equally among buttons */
+    max-width: 40px; /* Set a maximum width for each button if needed */
+    margin-right: 1%;
+}
+
+.actions-btns {
+    display: flex;
+    margin-left: 2%;
+    max-width: 40%;
+    margin-right: 10px;
+}
+
+button div {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Center the content horizontally */
+    gap: 5px;
+}
+
+.btn:focus {
+    outline: none;
+}
+
+.green {
+    color: green;
+}
+
+.red {
+    color: red;
+}

@@ -92,7 +92,11 @@ router.post("/login", function(req, res, next){
     req.logIn(user, (err) => {
       if (err) { return next(err); }
       // Successful login
-      return res.render('/', {title: "Success", message: req.flash('success')});
+      console.log("user: ", user);
+      req.user = user;
+      res.cookie('user', user.username, { maxAge: 9000000 });
+      res.cookie('isLoggedIn', true, { maxAge: 9000000 });
+      return res.render('index', {title: "Success", message: req.flash('success')});
     });
   })(req, res, next);
 });
@@ -102,7 +106,7 @@ function isLoggedIn(req, res, next){
   if(req.isAuthenticated()){
     return next();
   }
-  res.redirect("/");
+  res.redirect("/"); // redirect to login page
 }
 
 /* Handle Logout */

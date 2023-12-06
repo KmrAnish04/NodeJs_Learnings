@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Devfolio | Project</title>
+    <link rel="stylesheet" href="/stylesheets/index.css">
+    <link rel="stylesheet" href="/stylesheets/projects.css">
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <%- include('./partials/navbar') %>
+    
+
+    <!-- Project Card -->
+    <div class="projects-section">
+        <div class="project-main">
+            <p class="project-sec-heading section-heading">Projects</p>
+            <div class="project-content">
+                
+            <% projects.forEach(project => { %>
+                <div class="project-item-block flex-container-col" project-id='<%= project._id %>'>
+                    <p class="sub-heading"><%= project.title %></p>
+                    <div class="project-item flex-cont-two-col">
+                        <div class="project-disc flex-col1">
+                            <p style="text-align: justify;"><%= project.description %></p>
+                        </div>
+                        <div  class="project-demo flex-col2">
+                            <img src="/images/Home/project-craigslist.png" alt="">
+                        </div>        
+                    </div>
+
+                    <div class="actions-btns">
+                        <button class="btn" id="green" onclick="likePost('<%= project._id %>')">
+                            <div>
+                                <i class="fa fa-thumbs-up fa-lg" aria-hidden="true"></i>
+                                <p><%= project.likes.length %></p>
+                            </div>
+                        </button>
+                        <button class="btn" id="red">
+                            <div>
+                                <i class="fa fa-thumbs-down fa-lg" aria-hidden="true"></i>
+                                <p>5</p>
+                            </div>
+                        </button>
+                        <button class="btn" id="share">
+                            <div>
+                                <i class="fa fa-share fa-lg" aria-hidden="true"></i>
+                            </div>
+                        </button>
+                        <button class="btn" id="share-icon">
+                            <div>
+                                <i class="fa fa-comment fa-lg" aria-hidden="true"></i>
+                            </div>
+                        </button>
+                    </div>
+
+                    <div style="margin: 0 0%;" class="project-sepration-line"><hr></div>
+                </div>
+            <% }); %>
+                
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="spacing-primary"></div>
+    <div class="spacing-primary"></div>
+
+
+    <!-- footer -->
+    <%- include('./partials/footer') %>
+
+    <script src="https://use.fontawesome.com/fe459689b4.js"></script>
+    <script src="/javascripts/projects.js"></script>
+</body>
+
+</html>
