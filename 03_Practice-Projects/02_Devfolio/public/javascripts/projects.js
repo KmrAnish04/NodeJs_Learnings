@@ -1,23 +1,23 @@
-var btn1 = document.querySelector('#green');
-var btn2 = document.querySelector('#red');
-console.log("hi")
-btn1.addEventListener('click', function () {
+// var btn1 = document.querySelector('#green');
+// var btn2 = document.querySelector('#red');
+// console.log("hi")
+// btn1.addEventListener('click', function () {
 
-  if (btn2.classList.contains('red')) {
-    btn2.classList.remove('red');
-  }
-  this.classList.toggle('green');
+//   if (btn2.classList.contains('red')) {
+//     btn2.classList.remove('red');
+//   }
+//   this.classList.toggle('green');
 
-});
+// });
 
-btn2.addEventListener('click', function () {
+// btn2.addEventListener('click', function () {
 
-  if (btn1.classList.contains('green')) {
-    btn1.classList.remove('green');
-  }
-  this.classList.toggle('red');
+//   if (btn1.classList.contains('green')) {
+//     btn1.classList.remove('green');
+//   }
+//   this.classList.toggle('red');
 
-});
+// });
 
 function getCookieValue(name) {
   const regex = new RegExp(`(^| )${name}=([^;]+)`)
@@ -49,14 +49,16 @@ function likePost(projectId) {
       .then(result => {
         console.log("result got: ", result.data.likes);
   
-        // Get the button element by its ID
-        // var button = document.getElementById('green');
-        var projectCard = document.querySelector('[project-id="' + projectId + '"]');
-        // Find the p tag within the button using querySelector
-        var button = projectCard.querySelector('button');
-        var likesCount = button.querySelector('p');
+        
+        let projectCard = document.querySelector('[project-id="' + projectId + '"]'); // Get the button element by its ID
+        let button = projectCard.querySelector('button');
+        let likesCount = button.querySelector('p');
+
+        if(likesCount.textContent < result.data.likes.length){button.classList.toggle('green');}
+        else{button.classList.remove('green')}
+
         likesCount.textContent = result.data.likes.length;
-        button.classList.toggle('green');
+        console.log("likes data: ", result.data.likes);
       })
 
   }

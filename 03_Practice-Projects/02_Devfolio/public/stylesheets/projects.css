@@ -3,8 +3,9 @@ button {
     outline: 0;
     color: #AAA;
     max-height: 40px;
-    flex: 1; /* Distribute available space equally among buttons */
-    max-width: 40px; /* Set a maximum width for each button if needed */
+    flex: 1;
+    border-radius: 5%;
+    max-width: 40px;
     margin-right: 1%;
 }
 
@@ -18,7 +19,7 @@ button {
 button div {
     display: flex;
     align-items: center;
-    justify-content: center; /* Center the content horizontally */
+    justify-content: center;
     gap: 5px;
 }
 
@@ -32,4 +33,20 @@ button div {
 
 .red {
     color: red;
+}
+
+/* Style for a disabled button */
+.disabled-button {
+    background-color: #dcdcdc;
+    color: #a0a0a0;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+/* Optional: Style for a disabled button on hover */
+.disabled-button:hover {
+    background-color: #dcdcdc;
+    color: #a0a0a0;
+    cursor: not-allowed;
+    opacity: 0.7;
 }

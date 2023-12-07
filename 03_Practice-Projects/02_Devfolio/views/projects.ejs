@@ -40,20 +40,21 @@
                                 <p><%= project.likes.length %></p>
                             </div>
                         </button>
-                        <button class="btn" id="red">
+                        <button class="btn disabled-button" id="red">
                             <div>
                                 <i class="fa fa-thumbs-down fa-lg" aria-hidden="true"></i>
                                 <p>5</p>
                             </div>
                         </button>
-                        <button class="btn" id="share">
+                        <button class="btn disabled-button" id="share-icon">
                             <div>
                                 <i class="fa fa-share fa-lg" aria-hidden="true"></i>
                             </div>
                         </button>
-                        <button class="btn" id="share-icon">
+                        <button class="btn disabled-button" id="comment-icon">
                             <div>
                                 <i class="fa fa-comment fa-lg" aria-hidden="true"></i>
+                                <p><%= project.comments.length %></p>
                             </div>
                         </button>
                     </div>
