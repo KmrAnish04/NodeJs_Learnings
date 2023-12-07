@@ -23,7 +23,7 @@ router.get('/projects', async function (req, res, next) {
 
 
 router.put('/like', isLoggedIn, async function(req, res){
-  console.log("logged In user ********: ", req.user);
+  // console.log("logged In user ********: ", req.user);
 
   const { projectId } = req.body;
   const user = req.user; // user will exist only if user is logged in.
@@ -70,5 +70,44 @@ function isLoggedIn(req, res, next){
   }
   res.redirect("/"); // redirect to login page
 }
+
+
+// Enum for resume drive link types
+const ResumeDriveLinkType = {
+  BASE: 'base',
+  PREVIEW: 'preview',
+  SHARING: 'sharing',
+  DOWNLOAD: 'download'
+};
+
+// Function to generate Resume Google Drive links
+function generateDriveLinks(baseLink, fileId) {
+
+  const previewLink = `${baseLink}/file/d/${fileId}/preview`; // Resume Preview Mode
+  const sharingLink = `${baseLink}/file/d/${fileId}/view?usp=sharing`; // Resume Sharing Mode
+  const downloadLink = `${baseLink}/u/0/uc?id=${fileId}&export=download`; // Resume Export/Download Mode
+
+  return {
+    [ResumeDriveLinkType.PREVIEW]: previewLink,
+    [ResumeDriveLinkType.SHARING]: sharingLink,
+    [ResumeDriveLinkType.DOWNLOAD]: downloadLink
+  };
+}
+
+// Define route for /resume
+router.get('/resume', (req, res) => {
+
+  const baseLink = 'https://drive.google.com'; // Base Domain Name Of Google Drive
+  const fileId = '1MSqPDX5HQUqwqIBU1PGZXx581Ujl9Wpj'; // Google Drive Resume PDF File ID
+  const resumeDriveLinks = generateDriveLinks(baseLink, fileId);
+
+  res.render('resume', {
+      title: 'Resume',
+      previewLink: resumeDriveLinks[ResumeDriveLinkType.PREVIEW],
+      sharingLink: resumeDriveLinks[ResumeDriveLinkType.SHARING],
+      downloadLink: resumeDriveLinks[ResumeDriveLinkType.DOWNLOAD]
+  });
+});
+
 
 module.exports = router;

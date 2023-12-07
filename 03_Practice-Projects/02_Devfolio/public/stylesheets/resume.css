@@ -1,0 +1,17 @@
+
+.iframe-container {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+iframe {
+    width: 50%;
+    height: 1000px;
+    border: 5px double rgb(226, 14, 163);;
+}
+
+.button-container{
+    /* max-width: 100%; */
+}

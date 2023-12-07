@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> <%=title%> </title>
+    <link rel="stylesheet" href="/stylesheets/index.css">
+    <link rel="stylesheet" href="/stylesheets/resume.css">
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <%- include('./partials/navbar') %>
+    
+    <p class="project-sec-heading section-heading" style="text-align: center;">My <span id="techstack-heading-oo" >Resume</span></p>
+
+    <div class="button-container">
+        <a class="link button-primary" href='<%= downloadLink %>'>Download Resume</a>
+        <button class="link button-secondry" onclick="copyLinkToClipboard('<%= sharingLink %>')">Share/Copy Link</button>
+    </div>
+    <div class="iframe-container">
+        <!-- Embed Google Drive link using iframe -->
+        <iframe src='<%= previewLink %>' frameborder="0" scrolling="no"></iframe>
+    </div>
+    
+
+    <!-- footer -->
+    <%- include('./partials/footer') %>
+
+    <script src="/javascripts/resume.js"></script>
+</body>
+
+</html>
