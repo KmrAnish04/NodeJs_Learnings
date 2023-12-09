@@ -3,19 +3,22 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-const {connectToMongoDB} = require('./database/controllers/connectDB')
 const expressSession = require('express-session')
 const passport = require('passport');
 const flash = require("connect-flash");
 
 
+// Custom Imports
+const {connectToMongoDB} = require('./database/controllers/connectDB')
+const { userModel } = require('./database/models/user');
 
+
+// Routes
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var adminRoute = require('./routes/admin');
-const { userModel } = require('./database/models/user');
 
-// Connecting Database
+// DataBase Connection
 connectToMongoDB('mongodb://localhost:27017/Devfolio-Anish')
 .then(()=>{console.log("MongoDB Connected!")})
 .catch(err => console.error('MongoDB: Something went wrong', err));
@@ -55,10 +58,11 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 
-
+// Routes
 app.use('/', indexRouter);
 app.use('/user', usersRouter);
 app.use('/admin', adminRoute)
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

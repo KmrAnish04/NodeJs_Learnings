@@ -1,5 +1,3 @@
-// models/project.js
-
 const mongoose = require('mongoose');
 
 const projectSchema = new mongoose.Schema({
@@ -21,7 +19,7 @@ const projectSchema = new mongoose.Schema({
     {
       user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User' // Assuming you have a User model
+        ref: 'User' // Assuming User model exists
       },
       date: {
         type: Date,
@@ -33,7 +31,7 @@ const projectSchema = new mongoose.Schema({
     {
       user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User' // Assuming you have a User model
+        ref: 'User' // Assuming User model exists
       },
       text: String,
       date: {
