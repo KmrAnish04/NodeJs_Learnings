@@ -1,68 +1,24 @@
 const { userModel} = require("../database/models/user");
+const {registerUser} = require("../database/controllers/user")
 var express = require("express");
 var router = express.Router();
 const passport = require('passport');
-const { route } = require(".");
 
 const localStrategy = require('passport-local');
 passport.use(new localStrategy(userModel.authenticate()));
 
 
 /* GET users listing. */
-router.get("/", isLoggedIn,function (req, res, next) {
-  res.send("respond with a resource");
-});
+// router.get("/:id", isLoggedIn,function (req, res, next) {
+//   res.send("respond with a resource");
+// });
 
 router.get("/register", function(req, res){
   req.flash('UserAlreadyExists', 'Username/Email is already taken. Please choose another.'); // Add an error flash message
   req.flash('SignUpSuccess', 'SignUp Successful!'); // Add a success flash message
   req.flash('SignUpFailure', 'Registration failed. Please try again.'); // Add a general failure
   res.render('signup', { title: 'SignUp', message: '' })
-}).post("/register", async function (req, res, next) {
-  
-  // Check if this user already exists or not
-  // let user = await userModel.findOne(
-  //   {$or: [
-  //     { username: req.body.username }, 
-  //     { email: req.body.email } 
-  //   ]});
-
-  // if (user) {
-  //   console.log("user found: ", user);
-  //   // return res.status(400).send("User Already Exists!");
-  //   // return done(null, false, { message: "invalid password." });
-  // } else {
-    // Create new user
-    newUser = new userModel({
-      name: req.body.name,
-      email: req.body.email,
-      username: req.body.username,
-      password: req.body.password,
-    });
-
-    userModel.register(newUser, req.body.password , function(err,user){  
-
-
-      if (err) {
-        console.error(err);
-        // Check if the error is due to an existing user
-        if (err.name === 'UserExistsError') {
-            return res.render('signup', {title: "SignUp", message:  req.flash('UserAlreadyExists')});
-        }
-        // Handle other registration failures
-        return res.render('signup', {title: "SignUp", message: req.flash('SignUpFailure')});
-    }
-      else{
-        //A new user was saved
-        passport.authenticate("local")(req,res,function(){
-          console.log("user Created!");
-          res.render('/', {title: "SignUp", message: req.flash('SignUpSuccess')});
-        })
-      }
-    });
-
-  // }
-});
+}).post("/register", registerUser);
 
 
 // .post("/login", passport.authenticate("local", {
@@ -101,7 +57,6 @@ router.post("/login", function(req, res, next){
   })(req, res, next);
 });
 
-
 function isLoggedIn(req, res, next){
   if(req.isAuthenticated()){
     return next();
@@ -120,5 +75,23 @@ function isLoggedIn(req, res, next){
   req.logout();
   res.redirect('/');
 });
+
+
+// SSO Login
+router.get("/loginwithsso", function(req, res){
+  
+  const authProviderUrl = 'http://localhost:3000/api/v1/auth/login'; // Replace with your authentication provider's URL
+  // const redirectUrl = `${req.protocol}://${req.headers.host}${req.path}`; // Your callback URL after authentication
+  const redirectUrl = `${req.protocol}://${req.headers.host}`; // Your callback URL after authentication
+
+  // Redirect URL: After the successfull authentication, the auth service provider will redirct us on the Redirect URL.
+  // const ssoRedirectUrl = `${authProviderUrl}?next=${redirectUrl}`;
+  const ssoRedirectUrl = `${authProviderUrl}?redirectURL=${redirectUrl}`;
+  console.log("redi: ", redirectUrl);
+
+  // res.json(`Yaha se tumhe auth microservices pe redirect kiya jaega, jiska url hai ${ssoRedirectUrl}`)
+  res.redirect(ssoRedirectUrl);
+})
+
 
 module.exports = router;

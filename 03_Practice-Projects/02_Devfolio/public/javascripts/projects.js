@@ -31,13 +31,14 @@ function likePost(projectId) {
 
   let isLoggedIn = getCookieValue('isLoggedIn');
   
-  // console.log("cookie: Login", isLoggedIn)
-  // console.log("post id", projectId);
+  console.log("cookie: Login", isLoggedIn)
+  console.log("post id", projectId);
 
   if(isLoggedIn){
 
     // console.log("post liked", projectId);
     fetch('/like', {
+
         method: 'put',
         headers: {
           'Content-Type': 'application/json'
@@ -48,7 +49,7 @@ function likePost(projectId) {
       })
       .then(res => res.json())
       .then(result => {
-        // console.log("result got: ", result.data.likes);
+        console.log("result got: ", result.data.likes);
   
         
         let projectCard = document.querySelector('[project-id="' + projectId + '"]'); // Get the button element by its ID
@@ -59,7 +60,7 @@ function likePost(projectId) {
         else{button.classList.remove('green')}
 
         likesCount.textContent = result.data.likes.length;
-        // console.log("likes data: ", result.data.likes);
+        console.log("likes data: ", result.data.likes);
       })
 
   }

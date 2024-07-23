@@ -3,14 +3,18 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const axios = require('axios');
 const expressSession = require('express-session')
 const passport = require('passport');
 const flash = require("connect-flash");
+require("dotenv").config();
+
 
 
 // Custom Imports
-const {connectToMongoDB} = require('./database/controllers/connectDB')
+const { connectToMongoDB } = require('./database/controllers/connectDB.js')
 const { userModel } = require('./database/models/user');
+const checkSSORedirect = require('./middlewares/checkSSORedirect.js');
 
 
 // Routes
@@ -19,15 +23,12 @@ var usersRouter = require('./routes/users');
 var adminRoute = require('./routes/admin');
 
 // DataBase Connection
-connectToMongoDB('mongodb://localhost:27017/Devfolio-Anish')
-.then(()=>{console.log("MongoDB Connected!")})
-.catch(err => console.error('MongoDB: Something went wrong', err));
+connectToMongoDB(process.env.DB_URL)
+  .then(() => { console.log("MongoDB Connected!") })
+  .catch(err => console.error('MongoDB: Something went wrong', err));
+
 
 var app = express();
-
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
 
 app.use(expressSession({
   resave: false,
@@ -39,23 +40,27 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // used to serialize the user for the session
-passport.serializeUser(function(user, done) {done(null, user.id); });
+passport.serializeUser(function (user, done) { done(null, user.id); });
+
 // used to deserialize the user
-passport.deserializeUser(async function(id, done) {
-  try{
+passport.deserializeUser(async function (id, done) {
+  try {
     const user = await userModel.findById(id);
     done(null, user);
-  }catch(error){
-    done(error, false);
-  }
+  } 
+  catch (error) { done(error, false); }
 });
 
 
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+
+app.use(checkSSORedirect());
 
 
 // Routes
@@ -65,12 +70,12 @@ app.use('/admin', adminRoute)
 
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
