@@ -4,15 +4,17 @@ const {SSO_SERVER_URL, SSO_SERVER_AUTH_ROUTES} = require("../src/constants.js");
 
 const ssoRedirect = ()=>{
     return async function (req, res, next) {
+        console.log("In checkSSORedirect() :>> ");
+
         const {ssoToken} = req.query;
-        console.log("ssoToken: ", ssoToken);
-        console.log(`${SSO_SERVER_URL}/${SSO_SERVER_AUTH_ROUTES.SSO_TOKEN_VERIFICATION}`);
+        console.log("ssoToken :>> ", ssoToken);
+        console.log(`SSO Auth Server URL :>> ${SSO_SERVER_URL}/${SSO_SERVER_AUTH_ROUTES.SSO_TOKEN_VERIFICATION}`);
 
         if(ssoToken != null){
             // const redirctURL = url.parse(req.url).pathname; // depricated
             const redirctURL = new URL(req.url , `http://${req.headers.host}`).pathname;
             
-            console.log("redirectURL: ", redirctURL);
+            console.log("RedirectURL: ", redirctURL);
 
             try {
                 const response = await axios.get(
@@ -21,15 +23,17 @@ const ssoRedirect = ()=>{
                 );
 
                 // console.log("response: ", response.data);
-                console.log("response: ", response.data.data.token);
+                console.log("axios response :>> ", response.data.data.token);
                 const token = response.data.data.token;
                 const decoded = await verifyJwtToken(token);
                 req.session.user = decoded;
+                req.user = decoded;
                 console.log("Tried to Login User ✅");
             } 
             catch (error) { return next(error) }
 
             console.log("req.session : >> ", req.session);
+            cout<<"\n\n";
             return res.redirect(`${redirctURL}`);
         }
 

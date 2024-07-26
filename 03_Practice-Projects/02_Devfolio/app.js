@@ -1,25 +1,26 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
 const expressSession = require('express-session')
 const passport = require('passport');
 const flash = require("connect-flash");
 require("dotenv").config();
 
 
-
 // Custom Imports
-const { connectToMongoDB } = require('./database/controllers/connectDB.js')
-const { userModel } = require('./database/models/user');
+const { connectToMongoDB } = require('./database/DB_Connection.js');
+const { userModel } = require('./database/models/user.js');
 const checkSSORedirect = require('./middlewares/checkSSORedirect.js');
+const ErrorHandler = require("./middlewares/ErrorHandler.js");
 
 
 // Routes
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-var adminRoute = require('./routes/admin');
+const userRouter = require('./routes/user.route.js');
+const authRouter = require('./routes/auth.route.js');
+const ssoAuthRouter = require('./routes/ssoAuth.route.js');
+const adminRoute = require('./routes/admin.js');
 
 
 // DataBase Connection
@@ -29,6 +30,8 @@ connectToMongoDB(process.env.DB_URL)
 
 
 var app = express();
+
+
 
 app.use(expressSession({
   resave: false,
@@ -59,13 +62,13 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
-
 app.use(checkSSORedirect());
 
 
 // Routes
-app.use('/', indexRouter);
-app.use('/user', usersRouter);
+app.use('/', userRouter);
+app.use('/auth', authRouter);
+app.use('/sso-auth', ssoAuthRouter);
 app.use('/admin', adminRoute)
 
 
@@ -75,14 +78,9 @@ app.use(function (req, res, next) {
 });
 
 // error handler
-app.use(function (err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+app.use(ErrorHandler());
 
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
-});
+
+
 
 module.exports = app;

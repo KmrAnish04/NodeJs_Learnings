@@ -28,29 +28,28 @@ function getCookieValue(name) {
 }
 
 function likePost(projectId) {
+  console.log("In likePost() :>> ");
 
   let isLoggedIn = getCookieValue('isLoggedIn');
   
-  console.log("cookie: Login", isLoggedIn)
+  console.log("cookie: isLoggedIn :>>", isLoggedIn)
   console.log("post id", projectId);
 
   if(isLoggedIn){
 
-    // console.log("post liked", projectId);
     fetch('/like', {
 
-        method: 'put',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          'projectId': projectId
-        })
+      method: 'put',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        'projectId': projectId
       })
+    })
       .then(res => res.json())
       .then(result => {
-        console.log("result got: ", result.data.likes);
-  
+        console.log("Total Likes for Project :>> ", result.data.likes);
         
         let projectCard = document.querySelector('[project-id="' + projectId + '"]'); // Get the button element by its ID
         let button = projectCard.querySelector('button');
@@ -66,5 +65,6 @@ function likePost(projectId) {
   }
   else{
     console.log("You are not Logged In!")
+    console.log("\n\n");
   }
 }

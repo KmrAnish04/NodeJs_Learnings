@@ -10,7 +10,7 @@ async function connectToMongoDB(dbURL){
             resolve(res);
         })
         .catch((err)=>{
-            console.error('Error connecting to MongoDB:', err);
+            // console.error('Error connecting to MongoDB:', err);
             reject(err);
         })
     })

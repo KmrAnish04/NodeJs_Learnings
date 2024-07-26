@@ -1,4 +1,13 @@
-// CONSTANTS
+
+
+module.exports.G_DRIVE_LINK_TYPES = {
+    BASE: 'base',
+    PREVIEW: 'preview',
+    SHARING: 'sharing',
+    DOWNLOAD: 'download'
+};
+
+module.exports.G_DRIVE_BASE_LINK = 'https://drive.google.com';
 
 module.exports.SSO_SERVER_URL = "http://localhost:3000/api/v1";
 
