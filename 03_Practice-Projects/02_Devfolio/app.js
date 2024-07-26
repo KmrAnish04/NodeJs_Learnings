@@ -20,7 +20,7 @@ const ErrorHandler = require("./middlewares/ErrorHandler.js");
 const userRouter = require('./routes/user.route.js');
 const authRouter = require('./routes/auth.route.js');
 const ssoAuthRouter = require('./routes/ssoAuth.route.js');
-const adminRoute = require('./routes/admin.js');
+const adminRoute = require('./routes/admin.route.js');
 
 
 // DataBase Connection
