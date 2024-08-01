@@ -1,5 +1,6 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
+const {verifyJwt} = require('../middlewares/index.js');
 
 const { 
   homePage, 
@@ -13,7 +14,7 @@ const {
 
 router.get('/', homePage);
 
-router.get('/projects', getProjects)
+router.get('/projects', verifyJwt, getProjects)
 
 router.put('/like', isLoggedIn, doLikeProject);
 

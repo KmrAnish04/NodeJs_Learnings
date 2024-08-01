@@ -22,18 +22,24 @@ const ssoRedirect = ()=>{
                     { headers: { Authorization: `Bearer ${process.env.APP_TOKEN}` } }
                 );
 
-                // console.log("response: ", response.data);
-                console.log("axios response :>> ", response.data.data.token);
-                const token = response.data.data.token;
+                console.log('accessToken :>> ', response.data.data.accessToken);
+                console.log('refreshToken :>> ', response.data.data.refreshToken);
+                // console.log("axios response :>> ", response.data.data.accessToken);
+                const token = response.data.data.accessToken;
                 const decoded = await verifyJwtToken(token);
-                req.session.user = decoded;
+                req.session.user = {
+                    ...decoded, 
+                    accessToken: response.data.data.accessToken, 
+                    refreshToken: response.data.data.refreshToken
+                };
+                
                 req.user = decoded;
                 console.log("Tried to Login User ✅");
             } 
             catch (error) { return next(error) }
 
             console.log("req.session : >> ", req.session);
-            cout<<"\n\n";
+            console.log<<"\n\n";
             return res.redirect(`${redirctURL}`);
         }
 
