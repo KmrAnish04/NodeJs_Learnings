@@ -13,6 +13,7 @@ const homePage = (req, res, next )=> {
       res.clearCookie('user');
       res.clearCookie('isLoggedIn');
     }
+    console.log("Inside HomePage!");
     res.render('index', { title: 'Express' });
 }
 

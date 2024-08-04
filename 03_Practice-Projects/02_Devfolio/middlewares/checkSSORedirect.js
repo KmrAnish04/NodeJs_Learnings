@@ -5,6 +5,7 @@ const {SSO_SERVER_URL, SSO_SERVER_AUTH_ROUTES} = require("../src/constants.js");
 const ssoRedirect = ()=>{
     return async function (req, res, next) {
         console.log("In checkSSORedirect() :>> ");
+    console.log("\n\n In checkSSORedirect(): req.session", req.session.user);
 
         const {ssoToken} = req.query;
         console.log("ssoToken :>> ", ssoToken);
@@ -33,12 +34,16 @@ const ssoRedirect = ()=>{
                     refreshToken: response.data.data.refreshToken
                 };
                 
-                req.user = decoded;
+                req.user = {
+                    ...decoded, 
+                    accessToken: response.data.data.accessToken, 
+                    refreshToken: response.data.data.refreshToken
+                };
                 console.log("Tried to Login User ✅");
             } 
             catch (error) { return next(error) }
 
-            console.log("req.session : >> ", req.session);
+            console.log("checkSSOToken Last : >> ", req.session);
             console.log<<"\n\n";
             return res.redirect(`${redirctURL}`);
         }
