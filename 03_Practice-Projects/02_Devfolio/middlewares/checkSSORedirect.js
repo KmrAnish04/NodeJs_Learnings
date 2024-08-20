@@ -4,17 +4,17 @@ const {SSO_SERVER_URL, SSO_SERVER_AUTH_ROUTES} = require("../src/constants.js");
 
 const ssoRedirect = ()=>{
     return async function (req, res, next) {
+        console.log("\t********************************************");
         console.log("In checkSSORedirect() :>> ");
-    console.log("\n\n In checkSSORedirect(): req.session", req.session.user);
-
+        
         const {ssoToken} = req.query;
-        console.log("ssoToken :>> ", ssoToken);
-        console.log(`SSO Auth Server URL :>> ${SSO_SERVER_URL}/${SSO_SERVER_AUTH_ROUTES.SSO_TOKEN_VERIFICATION}`);
 
-        if(ssoToken != null){
-            // const redirctURL = url.parse(req.url).pathname; // depricated
+        console.log("req.session.user", req.session.user);
+        console.log("ssoToken :>> ", ssoToken);
+        console.log(`SSO Server URL :>> ${SSO_SERVER_URL}/${SSO_SERVER_AUTH_ROUTES.SSO_TOKEN_VERIFICATION}`);
+
+        if(ssoToken){
             const redirctURL = new URL(req.url , `http://${req.headers.host}`).pathname;
-            
             console.log("RedirectURL: ", redirctURL);
 
             try {
@@ -23,28 +23,27 @@ const ssoRedirect = ()=>{
                     { headers: { Authorization: `Bearer ${process.env.APP_TOKEN}` } }
                 );
 
-                console.log('accessToken :>> ', response.data.data.accessToken);
-                console.log('refreshToken :>> ', response.data.data.refreshToken);
-                // console.log("axios response :>> ", response.data.data.accessToken);
-                const token = response.data.data.accessToken;
-                const decoded = await verifyJwtToken(token);
-                req.session.user = {
-                    ...decoded, 
-                    accessToken: response.data.data.accessToken, 
-                    refreshToken: response.data.data.refreshToken
-                };
+                const { accessToken, refreshToken } = response.data.data;
+
+                console.log('Got accessToken :>> ', accessToken);
+                console.log('Got refreshToken :>> ', refreshToken);
+
+                const decoded = await verifyJwtToken(accessToken);
+
+                setTimeout(() => {
+                    console.log("SetTimeOut Executed!")
+                    req.session.user = {
+                        ...decoded, 
+                        accessToken, 
+                        refreshToken
+                    };
+                }, 5);
                 
-                req.user = {
-                    ...decoded, 
-                    accessToken: response.data.data.accessToken, 
-                    refreshToken: response.data.data.refreshToken
-                };
+                
                 console.log("Tried to Login User ✅");
             } 
             catch (error) { return next(error) }
 
-            console.log("checkSSOToken Last : >> ", req.session);
-            console.log<<"\n\n";
             return res.redirect(`${redirctURL}`);
         }
 

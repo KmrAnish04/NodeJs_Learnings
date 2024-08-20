@@ -1,3 +1,4 @@
+const fs = require('fs');
 const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
@@ -25,7 +26,9 @@ const adminRoute = require('./routes/admin.route.js');
 
 // DataBase Connection
 connectToMongoDB(process.env.DB_URL)
-  .then(() => { console.log("MongoDB Connected!") })
+  .then(() => { 
+    console.log("DataBase Setup Done! ☑️") 
+  })
   .catch(err => console.error('MongoDB: Something went wrong', err));
 
 
@@ -55,7 +58,19 @@ passport.deserializeUser(async function (id, done) {
 });
 
 
-app.use(logger('dev'));
+
+// log only 4xx and 5xx responses to console
+app.use(logger('dev', {
+  skip: function (req, res) { return res.statusCode < 400 }
+}))
+ 
+// log all requests to access.log
+app.use(logger('common', {
+  stream: fs.createWriteStream(path.join(__dirname, 'access.log'), { flags: 'a' })
+}))
+
+
+
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));

@@ -23,7 +23,7 @@ const adminDevProfileOfThemSelf = (req, res, next) => {
 //                           Crate Profile --> Post
 ////////////////////////////////////////////////////////////////////////////
 const createAdminfProfileForThemSelf = async (req, res, next) => {
-    console.log("****", req.body.contactInfo);
+    // console.log("****", req.body.contactInfo);
     let newDevProfile = new devProfile({
         name: req.body.name,
         title: req.body.title,

@@ -9,11 +9,13 @@ const {SSO_SERVER_URL, SSO_SERVER_AUTH_ROUTES} = require('../src/constants.js');
 //                      Jwt Token Verificator Middleware
 ////////////////////////////////////////////////////////////////////////////
 module.exports.verifyJwt = async (req, res, next)=>{
-    console.log("Inside verifyJwt():", req.session.user);
+    // console.log("Inside verifyJwt():", req.session.user);
     const accessToken = req.session?.user?.accessToken;
     const refreshToken = req.session?.user?.refreshToken;
-    console.log('accessToken :>> ', accessToken); 
-    console.log('refreshToken :>> ', refreshToken); 
+    // console.log('accessToken :>> ', accessToken); 
+    // console.log('refreshToken :>> ', refreshToken); 
+
+
     if(!accessToken){
         return res
         .status(401)
@@ -49,11 +51,11 @@ module.exports.verifyJwt = async (req, res, next)=>{
                 console.log('old accessToken :>> ', newAccessToken);
                 const decoded = await verifyJwtToken(newAccessToken);
                 req.session.user.accessToken = newAccessToken
-                // req.user.accessToken = newAccessToken
+
                 console.log('req.user :>> ', req.user);
 
                 console.log('\n\nnew AccessToken :>> ', newAccessToken);
-                console.log("Tried to Login User ✅");
+                // console.log("Tried to Login User ✅");
 
                 next();
             } 

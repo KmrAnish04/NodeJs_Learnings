@@ -51,7 +51,7 @@ const doRegisterUser = async (req, res) => {
         } else {
             //A new user saved
             passport.authenticate("local")(req, res, function () {
-                console.log("user Created!");
+                // console.log("user Created!");
                 res.render('/', {
                     title: "SignUp",
                     message: req.flash('SignUpSuccess')
@@ -95,8 +95,8 @@ const doLoginUser = (req, res, next) => {
         req.logIn(user, (err) => { // Authentication successful, login user
             if (err) { return next(err); }
 
-            console.log("Successful login")
-            console.log("user: ", user);
+            // console.log("Successful login")
+            // console.log("user: ", user);
             req.user = user;
 
             res.cookie('user', user.username, {

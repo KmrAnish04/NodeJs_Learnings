@@ -9,11 +9,15 @@ const Project = require('../database/models/project.js');
 //                           Home/Landing Page --> Get
 ////////////////////////////////////////////////////////////////////////////
 const homePage = (req, res, next )=> {
-    if(!req.user){
+    console.log("\n********************************");
+    console.log("Inside HomePage >> Get");
+    console.log("req.session.user :>>" , req.session.user);
+    console.log("******************************** \n");
+    
+    if(!req.session.user){
       res.clearCookie('user');
       res.clearCookie('isLoggedIn');
     }
-    console.log("Inside HomePage!");
     res.render('index', { title: 'Express' });
 }
 
