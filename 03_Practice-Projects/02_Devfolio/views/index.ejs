@@ -240,7 +240,11 @@
 
 
     <div class="spacing-primary"></div>
-
+    <h1><%= user %></h1>
+    <script>
+        var user = JSON.parse('<%- JSON.stringify(user) %>')
+        console.log(user)
+    </script>
 
     <%- include('./partials/footer') %>
     <script src="/javascripts/index.js"></script>

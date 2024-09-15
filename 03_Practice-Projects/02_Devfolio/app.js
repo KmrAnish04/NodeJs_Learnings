@@ -11,8 +11,14 @@ require("dotenv").config();
 
 
 // Custom Imports
-const { connectToMongoDB } = require('./database/DB_Connection.js');
-const { userModel } = require('./database/models/user.js');
+const {
+  connectToMongoDB
+} = require('./database/DB_Connection.js');
+const {connectRedisClient} = require('./RedisConfig/redis.connection.js');
+const RedisSessionStore = require('./RedisConfig/redis.SessionStore.js')
+const {
+  userModel
+} = require('./database/models/user.js');
 const checkSSORedirect = require('./middlewares/checkSSORedirect.js');
 const ErrorHandler = require("./middlewares/ErrorHandler.js");
 
@@ -25,77 +31,96 @@ const adminRoute = require('./routes/admin.route.js');
 
 
 // DataBase Connection
-connectToMongoDB(process.env.DB_URL)
-  .then(() => { 
-    console.log("DataBase Setup Done! ☑️") 
-  })
-  .catch(err => console.error('MongoDB: Something went wrong', err));
+// connectToMongoDB(process.env.DB_URL)
+//   .then(() => {
+//     console.log("DataBase Setup Done! ☑️")
+//   })
+//   .catch(err => console.error('MongoDB: Something went wrong', err));
 
 
 var app = express();
 
+app.setupApp = async () => {
 
+  await connectToMongoDB(process.env.DB_URL)
+  const RedisClient = await connectRedisClient(process.env.REDIS_DB_URL);
 
-app.use(expressSession({
-  resave: false,
-  saveUninitialized: false,
-  secret: "this is devfolio's token!"
-}))
-app.use(flash());
-app.use(passport.initialize());
-app.use(passport.session());
+  app.use(expressSession({
+    store: RedisSessionStore(RedisClient),
+    resave: false,
+    saveUninitialized: false,
+    secret: "this is devfolio's token!",
+    cookie: {
+      secure: false,
+      maxAge: 5 * 60 * 1000
+    } // 5 minutes
+  }))
+  app.use(flash());
+  app.use(passport.initialize());
+  app.use(passport.session());
 
-// used to serialize the user for the session
-passport.serializeUser(function (user, done) { done(null, user.id); });
+  // used to serialize the user for the session
+  passport.serializeUser(function (user, done) {
+    done(null, user.id);
+  });
 
-// used to deserialize the user
-passport.deserializeUser(async function (id, done) {
-  try {
-    const user = await userModel.findById(id);
-    done(null, user);
-  } 
-  catch (error) { done(error, false); }
-});
-
-
-
-// log only 4xx and 5xx responses to console
-app.use(logger('dev', {
-  skip: function (req, res) { return res.statusCode < 400 }
-}))
- 
-// log all requests to access.log
-app.use(logger('common', {
-  stream: fs.createWriteStream(path.join(__dirname, 'access.log'), { flags: 'a' })
-}))
-
-
-
-app.use(express.json());
-app.use(cookieParser());
-app.use(express.urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname, 'public')));
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
-app.use(checkSSORedirect());
-
-
-// Routes
-app.use('/', userRouter);
-app.use('/auth', authRouter);
-app.use('/sso-auth', ssoAuthRouter);
-app.use('/admin', adminRoute)
-
-
-// catch 404 and forward to error handler
-app.use(function (req, res, next) {
-  next(createError(404));
-});
-
-// error handler
-app.use(ErrorHandler());
+  // used to deserialize the user
+  passport.deserializeUser(async function (id, done) {
+    try {
+      const user = await userModel.findById(id);
+      done(null, user);
+    } catch (error) {
+      done(error, false);
+    }
+  });
 
 
 
+  // log only 4xx and 5xx responses to console
+  app.use(logger('dev', {
+    skip: function (req, res) {
+      return res.statusCode < 400
+    }
+  }))
 
+  // log all requests to access.log
+  app.use(logger('common', {
+    stream: fs.createWriteStream(path.join(__dirname, 'access.log'), {
+      flags: 'a'
+    })
+  }))
+
+
+
+  app.use(express.json());
+  app.use(cookieParser());
+  app.use(express.urlencoded({
+    extended: false
+  }));
+  app.use(express.static(path.join(__dirname, 'public')));
+  app.set('views', path.join(__dirname, 'views'));
+  app.set('view engine', 'ejs');
+  app.use(checkSSORedirect());
+
+
+  // Routes
+  app.use('/', userRouter);
+  app.use('/auth', authRouter);
+  app.use('/sso-auth', ssoAuthRouter);
+  app.use('/admin', adminRoute)
+
+
+  // catch 404 and forward to error handler
+  app.use(function (req, res, next) {
+    next(createError(404));
+  });
+
+  // error handler
+  app.use(ErrorHandler());
+
+}
+
+
+
+app.setupApp();
 module.exports = app;

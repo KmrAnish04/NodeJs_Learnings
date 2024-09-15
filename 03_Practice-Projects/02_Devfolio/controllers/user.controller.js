@@ -1,24 +1,36 @@
 const {generateDriveLinks} = require('./controllerUtils/utils.controller.js');
 const {G_DRIVE_LINK_TYPES} = require('../src/constants.js');
 const Project = require('../database/models/project.js');
-
+const RedisSessionStore = require('../RedisConfig/redis.SessionStore.js');
 
 
 
 ////////////////////////////////////////////////////////////////////////////
 //                           Home/Landing Page --> Get
 ////////////////////////////////////////////////////////////////////////////
-const homePage = (req, res, next )=> {
+const homePage = async (req, res, next )=> {
     console.log("\n********************************");
     console.log("Inside HomePage >> Get");
-    console.log("req.session.user :>>" , req.session.user);
+    console.log("req.session :>>" , req.session);
+    console.log(" req.sessionID :>>" , req.sessionID);
+    console.log("req.cookies :>>" , req.cookies);
+
+    // await RedisSessionStore().get(`*:669b98a95e94a5a25b20e6fa:*`, (err, data)=>{
+    //     console.log("start");
+    //     console.log("err: ", err);
+    //     console.log("data: ", data)
+    //     console.log("end");
+    // });
+
+    
     console.log("******************************** \n");
     
     if(!req.session.user){
-      res.clearCookie('user');
-      res.clearCookie('isLoggedIn');
+      console.log("in homepage : cond. !req.session.user")
+      // res.clearCookie('user');
+      // res.clearCookie('isLoggedIn');
     }
-    res.render('index', { title: 'Express' });
+    res.render('index', { title: 'Express', user: req.session.user ? req.session.user : "Not Logged In ⚠️❌" });
 }
 
 

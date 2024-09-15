@@ -14,6 +14,7 @@ module.exports.SSO_SERVER_AUTH_ROUTES = {
     LOGIN: "auth/login",
     LOGOUT: "auth/logout",
     SSO_TOKEN_VERIFICATION: "auth/verifySSOToken",
+    REGISTER_USER_SID: "auth/register-sessionid",
     UPDATE_TOKEN: 'auth/update-auth-tokens',
     REGISTER: "auth/sign-up", // Not Working Right Now
 };

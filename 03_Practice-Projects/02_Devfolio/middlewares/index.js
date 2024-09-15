@@ -33,34 +33,34 @@ module.exports.verifyJwt = async (req, res, next)=>{
         console.log("\n\nError :>> ", error, "\n\n");
         // throw new Error("Error While Accessing Protected Route!!! ⚠️❌")
 
-        if (error instanceof TokenExpiredError) {
-            // return res
-            // .status(401)
-            // .send({ success: false, message: 'Unauthorized! Access Token was expired!' });
+        // if (error instanceof TokenExpiredError) {
+        //     // return res
+        //     // .status(401)
+        //     // .send({ success: false, message: 'Unauthorized! Access Token was expired!' });
             
-            try {
-                const response = await axios.post(
-                    `${SSO_SERVER_URL}/${SSO_SERVER_AUTH_ROUTES.UPDATE_TOKEN}`,
-                    {refreshToken: refreshToken},
-                    { headers: { Authorization: `Bearer ${process.env.APP_TOKEN}` } }
-                );
+        //     try {
+        //         const response = await axios.post(
+        //             `${SSO_SERVER_URL}/${SSO_SERVER_AUTH_ROUTES.UPDATE_TOKEN}`,
+        //             {refreshToken: refreshToken},
+        //             { headers: { Authorization: `Bearer ${process.env.APP_TOKEN}` } }
+        //         );
 
-                const newAccessToken = response.data.data.newAccessToken;
-                console.log('accessToken :>> ', newAccessToken);
+        //         const newAccessToken = response.data.data.newAccessToken;
+        //         console.log('accessToken :>> ', newAccessToken);
 
-                console.log('old accessToken :>> ', newAccessToken);
-                const decoded = await verifyJwtToken(newAccessToken);
-                req.session.user.accessToken = newAccessToken
+        //         console.log('old accessToken :>> ', newAccessToken);
+        //         const decoded = await verifyJwtToken(newAccessToken);
+        //         req.session.user.accessToken = newAccessToken
 
-                console.log('req.user :>> ', req.user);
+        //         console.log('req.user :>> ', req.user);
 
-                console.log('\n\nnew AccessToken :>> ', newAccessToken);
-                // console.log("Tried to Login User ✅");
+        //         console.log('\n\nnew AccessToken :>> ', newAccessToken);
+        //         // console.log("Tried to Login User ✅");
 
-                next();
-            } 
-            catch (error) { return next(error) }
-        }
+        //         next();
+        //     } 
+        //     catch (error) { return next(error) }
+        // }
         if (error instanceof NotBeforeError) {
         return res.status(401).send({ success: false, message: 'jwt not active' });
         }
